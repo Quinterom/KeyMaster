@@ -1,23 +1,15 @@
-# Importar las librerías necesarias.
-import requests
-from bs4 import BeautifulSoup
+import re
 
-# URL de la página que contiene las palabras.
-url = 'https://es.wiktionary.org/wiki/Ap%C3%A9ndice:1000_palabras_b%C3%A1sicas_en_espa%C3%B1ol'
+# Lee el contenido del archivo con codificación UTF-8
+with open('palabra.html', 'r', encoding='utf-8') as archivo:
+    contenido = archivo.read()
 
-# Obtener el contenido HTML de la página.
-response = requests.get(url)
-html = response.content
+# Extrae las palabras utilizando expresiones regulares
+palabras = re.findall(r'<span[^>]*>\s*([^<]+)\s*</span>', contenido)
 
-# Procesar el HTML para extraer las palabras.
-soup = BeautifulSoup(html, 'html.parser')
-table = soup.find('table', {'class': 'wikitable'})
-rows = table.find_all('tr')[1:]
-words = [row.find_all('td')[0].text.strip().lower() for row in rows]
+# Crea el array de JavaScript con las palabras
+array_js = '[' + ', '.join(['"' + palabra + '"' for palabra in palabras]) + ']'
 
-# Crear un archivo JavaScript con las palabras.
-with open('palabras.js', 'w') as file:
-    file.write('const palabras = [\n')
-    for word in words:
-        file.write(f'    "{word}",\n')
-    file.write('];')
+# Guarda el resultado en un archivo con codificación UTF-8
+with open('resultado.js', 'w', encoding='utf-8') as archivo_salida:
+    archivo_salida.write(array_js)
