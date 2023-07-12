@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prueba de escritura</title>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      background-color: #323437;
+      color: #646669;
+      font-family: "Segoe", Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      
+    }
+    
+    .header {
+      background-color: #323437;
+      color: white;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .logo {
+      width: 50px;
+      height: 50px;
+      margin-right: 10px;
+    }
+    
+    .logo img {
+      width: 100%;
+      height: 100%;
+    }
+
+    .separator {
+      height: 20px;
+      background-color: #323437;
+    }
+    .container
+    {
+      margin: 0 15%;
+      text-align: justify;
+      text-align-last: jusletify;
+    }
+    #textContainer {
+      display: flex;
+      flex-wrap: wrap;
+      /* justify-content: center; */
+      gap: 4px;
+      margin-bottom: 20px;
+
+      font-size: 1.5rem;
+      /* height: 152px; */
+      overflow: hidden;
+      width: 100%;
+      margin-left: unset;
+      transition: all 0.25s ease 0s;
+      
+}
+    .word {
+      border-bottom: 2px solid transparent;
+      font-size: 1em;
+      font-variant: no-common-ligatures;
+      line-height: 1em;
+      margin: .25em;
+      opacity: .50;
+    }
+
+    .error {
+      /* background-color: #f53e3e; */
+      color: #ca4754;
+    }
+
+    .selected {
+      /* background-color: #61bd4f; */
+      color: #d1d0c5;
+    }
+
+    .correct {
+      /* background-color: #61bd4f; */
+      color: #689d6a;
+    }
+
+    .input {
+      width: 20%;
+      padding: 10px;
+      font-size: 20px; 
+      background-color: #323437;
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="Logo.png" alt="Logo"> 
+    </div>
+    <h1>KeyLander</h1>
+  </header>
+  
+  <div class="separator"></div>
+  <div class="container">
+      <div id="textContainer"></div>
+  </div>
+  <div class="separator"></div>
+  <center> <input type="text" id="input" class="input" oninput="checkWord()" onkeydown="handleSpace(event)"></center>
+  
+  <script>
+
+    var arrayPalabras = ['rata', 'tuyo', 'mayor', 'partido', 'morder', 'susto', 'cerdo', 'tigre', 'instante', 'frontal', 'resfriado', 'mundo', 'encontrar', 'consolar', 'domingo', 'cargo', 'periodismo', 'electricidad', 'acá', 'parecido', 'pesar', 'bolsa', 'varios', 'varias', 'costa', 'real', 'rábano', 'aceptar', 'diagonal', 'raíz', 'parlamentario', 'tercero', 'consumo', 'dulce', 'construcción', 'por', 'relativo', 'municipio', 'afuera', 'incorrecto']
+   
+function generarTextoAleatorio(array) {
+  var texto = '';
+  var maxPalabras = 28;
+
+  for (var i = 0; i < maxPalabras; i++) {
+    var palabraAleatoria = array[Math.floor(Math.random() * array.length)];
+
+    if (i === maxPalabras - 1) {
+      texto += palabraAleatoria;
+    } else {
+      texto += palabraAleatoria + ' ';
+    }
+  }
+
+  return texto;
+}
+      
+    var text = generarTextoAleatorio(arrayPalabras);//"ahora que sabes escribir con los diez dedos trabajaremos en tu velocidad y luego pasaremos a otras teclas ahora que sabes escribir con los diez dedos trabajaremos en tu velocidad y luego pasaremos a otras teclas";
+    var words = text.split(' ');
+
+    var textContainer = document.getElementById('textContainer');
+    var input = document.getElementById('input');
+
+    var currentWordIndex = 0;
+
+    for (var i = 0; i < words.length; i++) {
+      var span = document.createElement('span');
+      span.innerHTML = words[i];
+      span.classList.add('word');
+      textContainer.appendChild(span);
+    }
+
+    input.focus();
+
+    function checkWord() {
+      var inputWord = input.value.trim();
+      var wordElements = textContainer.getElementsByClassName('word');
+      var currentWordElement = wordElements[currentWordIndex];
+
+      var isMatch = true;
+
+      for (var i = 0; i < inputWord.length; i++) {
+        var char = currentWordElement.textContent[i];
+        var charInput = inputWord[i];
+
+        if (charInput === undefined || char !== charInput) {
+          isMatch = false;
+          break;
+        }
+      }
+
+      if (isMatch) {
+        currentWordElement.classList.remove('error');
+        currentWordElement.classList.add('selected');
+      } else {
+        currentWordElement.classList.remove('selected');
+        currentWordElement.classList.add('error');
+      }
+    }
+
+    function handleSpace(event) {
+      if (event.key === ' ' && input.value.trim() === words[currentWordIndex]) {
+        input.value = '';
+        input.classList.remove('error', 'correct');
+       // textContainer.getElementsByClassName('word')[currentWordIndex].classList.remove('error', 'correct');
+       textContainer.getElementsByClassName('word')[currentWordIndex].classList.add('correct');
+       currentWordIndex++;
+      }
+    }
+  </script>
+</body>
+</html>
