@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Prueba de escritura</title>
+  <title>KeyMaster</title>
   <meta charset="UTF-8">
   <style>
     body {
       background-color: #323437;
       color: #646669;
-      font-family: "Segoe", Arial, sans-serif;
+      font-family: monospace, "Segoe", Arial, sans-serif;
       margin: 0;
       padding: 0;
       
@@ -90,6 +90,17 @@
       border: 2px solid #fff;
       border-radius: 5px;
     }
+    #wpm, #time {
+
+      color: #F8AD34;
+      font-family: monospace, "Segoe", Arial, sans-serif;
+      border-bottom: 2px solid transparent;
+      font-size: 1.1em;
+      font-variant: no-common-ligatures;
+      line-height: 1em;
+      margin: 0.45em;
+      opacity: .80;
+    }
   </style>
 </head>
 <body>
@@ -97,15 +108,17 @@
     <div class="logo">
       <img src="Logo.png" alt="Logo"> 
     </div>
-    <h1>KeyLander.</h1>
+    <h1>KeyMaster</h1>
   </header>
   
   <div class="separator"></div>
   <div class="container">
-      <div id="textContainer"></div>
+    <span id="wpm"></span>
+    <span id="time"></span>
+    <div id="textContainer"></div>
   </div>
   <div class="separator"></div>
-  <center> <input type="text" id="input" class="input" oninput="checkWord()" onkeydown="handleSpace(event)"></center>
+  <center> <input type="text" id="input" class="input" oninput="checkWord()" onkeydown="handleKeyDown(event)"></center>
   
   <script>
 
@@ -113,7 +126,7 @@
    
 function generarTextoAleatorio(array) {
   var texto = '';
-  var maxPalabras = 28;
+  var maxPalabras = 2;
 
   for (var i = 0; i < maxPalabras; i++) {
     var palabraAleatoria = array[Math.floor(Math.random() * array.length)];
@@ -133,8 +146,13 @@ function generarTextoAleatorio(array) {
 
     var textContainer = document.getElementById('textContainer');
     var input = document.getElementById('input');
+    
+    var wpmElement = document.getElementById('wpm');
+    var timeElement = document.getElementById('time');
 
     var currentWordIndex = 0;
+    var startTime = null;
+    var endTime = null;
 
     for (var i = 0; i < words.length; i++) {
       var span = document.createElement('span');
@@ -163,23 +181,68 @@ function generarTextoAleatorio(array) {
       }
 
       if (isMatch) {
-        currentWordElement.classList.remove('error');
-        currentWordElement.classList.add('selected');
+        if (currentWordElement!=null)
+        {
+          currentWordElement.classList.remove('error');
+          currentWordElement.classList.add('selected');
+        }
+        else{
+          startTime = null;
+        }
       } else {
         currentWordElement.classList.remove('selected');
         currentWordElement.classList.add('error');
       }
     }
 
-    function handleSpace(event) {
-      if (event.key === ' ' && input.value.trim() === words[currentWordIndex]) {
-        input.value = '';
-        input.classList.remove('error', 'correct');
-       // textContainer.getElementsByClassName('word')[currentWordIndex].classList.remove('error', 'correct');
-       textContainer.getElementsByClassName('word')[currentWordIndex].classList.add('correct');
-       currentWordIndex++;
+    function handleKeyDown(event) {
+      if (startTime == null) {
+        startTime = new Date().getTime();
+      }
+      else
+      {
+          if (event.key === ' ' && input.value.trim() === words[currentWordIndex]) {
+             input.value = '';
+             input.classList.remove('error', 'correct');
+             textContainer.getElementsByClassName('word')[currentWordIndex].classList.add('correct');
+             currentWordIndex++;
+          }
       }
     }
+
+    setInterval(updateTime, 1000);
+
+    function updateTime() {
+      if (startTime !== null && endTime === null) {
+        var currentTime = new Date().getTime();
+        var elapsedTime = (currentTime - startTime) / 1000;
+        var wpm = Math.round(currentWordIndex / (elapsedTime / 60));
+        wpmElement.innerHTML =  wpm;
+        timeElement.innerHTML =  parseInt(60-elapsedTime.toFixed(2), 10);
+        if (parseInt(60-elapsedTime.toFixed(2), 10)==0)   startTime = null;
+      }
+      // console.log(startTime);
+
+      
+    }
+
   </script>
 </body>
 </html>
+
+
+<!-- // function handleSpace(event) {
+  //   if (event.key === ' ' && input.value.trim() === words[currentWordIndex]) {
+  //     endTime = new Date().getTime();
+  //     var elapsedTime = (endTime - startTime) / 1000;
+  //     var wpm = Math.round(words.length / (elapsedTime / 60));
+  //     // wpmElement.innerHTML = wpm;
+  //     // timeElement.innerHTML = elapsedTime.toFixed(2);
+      
+  //     input.value = '';
+  //     input.classList.remove('error', 'correct');
+  //    // textContainer.getElementsByClassName('word')[currentWordIndex].classList.remove('error', 'correct');
+  //    textContainer.getElementsByClassName('word')[currentWordIndex].classList.add('correct');
+  //    currentWordIndex++;
+  //   }
+  // } -->
