@@ -21,7 +21,7 @@ const guardarDatos = async (data) => {
     // Insertar los datos en la colección
     //await collection.insertOne(data);
 
-    console.log('Datos guardados exitosamente');
+    console.log('Datos guardados exitosamente...');
   } catch (error) {
     console.error('Error al guardar los datos...', error);
   } finally {
@@ -42,9 +42,9 @@ export default async function handler(req, res) {
       await guardarDatos(data);
 
       // Responder con una confirmación o cualquier otro resultado necesario
-      res.status(200).json({ message: 'Datos guardados exitosamente' });
+      res.status(200).json({ message: 'Datos guardados exitosamente...' });
     } catch (error) {
-      res.status(500).json({ message: 'Error al procesar la solicitud' });
+      res.status(500).json({ message: 'Error al procesar la solicitud...' });
     }
   } else {
     res.status(404).json({ message: 'No encontrado' });
