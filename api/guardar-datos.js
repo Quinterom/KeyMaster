@@ -15,11 +15,11 @@ const guardarDatos = async (data) => {
     await client.connect();
 
     // Conectarse a la base de datos y obtener una referencia a la colección
-    const db = client.db('<KeyMastercoleccion>');
-    const collection = db.collection('<KeyMastercoleccion>');
+    //const db = client.db('<KeyMastercoleccion>');
+    //const collection = db.collection('<KeyMastercoleccion>');
 
     // Insertar los datos en la colección
-    await collection.insertOne(data);
+    //await collection.insertOne(data);
 
     console.log('Datos guardados exitosamente');
   } catch (error) {
