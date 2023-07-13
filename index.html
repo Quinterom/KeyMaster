@@ -125,22 +125,28 @@
 
     var arrayPalabras = ["parece", "uno", "espero", "otra", "ya", "los", "hace", "gran", "antes", "que", "tan", "voy", "hija", "casa", "estas", "estoy", "mismo", "decir", "han", "quien", "soy", "estar", "todos", "se", "nadie", "crees", "tener", "ir", "mi", "tal", "quien", "los", "dije", "mira", "a", "uno", "esa", "días", "desde", "verdad", "estas", "le", "podemos", "antes", "poco", "has", "es", "de", "tan", "qué", "pasa", "se", "gente", "pero", "nos", "se", "algo", "así", "cuando", "este", "cosa", "creo", "día", "gusta", "noche", "o", "la", "seguro", "tienes", "alguien", "como", "tiempo", "hasta", "después", "al", "esto", "por", "fue", "como", "hombre", "si", "mismo", "muy", "vez", "solo", "haciendo", "me", "hace", "siento", "crees", "era", "siempre", "bueno", "noche", "con", "siempre", "siento", "ver", "mía", "ella", "hola", "tiene", "nuestro", "hasta", "nosotros", "las", "noche", "algo", "solo", "estaba", "gracias", "dios", "mis", "entonces", "les", "fuera", "la", "ir", "favor", "qué", "voy", "más", "nos", "esa", "aquí", "que", "vida", "vamos", "buena", "he", "es", "puede", "tenemos", "entonces", "años", "seguro", "mira", "esto", "dos", "yo", "vez", "estar", "creo", "señor", "nada", "necesito", "bien", "esta", "era", "vamos", "será", "los", "tiene", "y", "he", "desde", "ti", "estamos", "cosas", "quieres", "es", "tú", "mía", "sin", "hacer", "cuando", "mundo", "lo", "espero", "nada", "trabajo", "yo", "papas", "este", "sobre", "hace", "como", "si", "sí", "tu", "su", "ahí", "dios", "día", "antes", "nunca", "tienes", "las", "solo", "sabe", "tipo", "tiempo", "dinero", "de", "pasa", "estar", "donde", "quiero", "hacer", "decir", "ser", "mismo", "dije", "cosa", "en", "lugar", "o", "puedes", "sé", "vas", "le", "papas", "hombre", "su", "o", "mucho", "ser", "para", "necesito", "gente", "puedes", "años", "nunca", "mira", "vamos", "del", "donde", "porque", "otro", "hija", "has", "sabes", "del", "oh", "verdad", "ahora", "ha", "también", "quiero", "espero", "haciendo", "sin", "cosa", "bueno", "estado", "a", "mejor", "fue", "él", "ese", "puede", "eso", "podría", "un", "porque", "acuerdo", "más", "una", "un", "acuerdo", "no", "todo", "mis", "esto", "donde", "estas", "momento", "aquí", "que", "tú", "ti", "dije", "tus", "ahora", "son", "crees", "por", "tener", "usted", "necesito", "estaba", "han", "porque", "así", "puedes", "todos", "quiere", "soy", "ver", "las", "cuando", "le", "mi", "como", "parece", "bien", "ha", "eres", "padre", "sus", "ver", "sé", "tiene", "oh", "como", "después", "ellos", "el", "hecho", "seguro", "algo", "no", "y", "también", "ti", "días", "otra", "para", "lo", "también", "después", "tú", "la", "tenemos", "hay", "momento", "muy", "alguien", "día", "para", "gran", "dije", "mí", "mejor", "sin", "dinero", "esta", "si", "mundo", "dónde", "años", "padre", "sea", "días", "verdad", "siempre", "ese", "esta", "nuestro", "era", "entonces", "podemos", "podría", "hola", "otro", "oh", "uno", "lugar", "en", "sea", "mañana", "papas", "son", "y", "ser", "hasta", "dice", "nada", "trabajo", "nuevo", "eres", "dónde", "quiero", "nadie", "todo", "no", "al", "de", "casa", "favor", "tu", "ese", "mundo", "ya", "voy", "fue", "tiempo", "va", "nunca", "esto"]
    
-function generarTextoAleatorio(array) {
-  var texto = '';
-  var maxPalabras = 43;
-
-  for (var i = 0; i < maxPalabras; i++) {
-    var palabraAleatoria = array[Math.floor(Math.random() * array.length)];
-
-    if (i === maxPalabras - 1) {
-      texto += palabraAleatoria;
-    } else {
-      texto += palabraAleatoria + ' ';
+    function handleClick(event) {
+      input.focus();
     }
-  }
 
-  return texto;
-}
+    document.addEventListener('click', handleClick);
+
+    function generarTextoAleatorio(array) {
+      var texto = '';
+      var maxPalabras = 28;
+
+      for (var i = 0; i < maxPalabras; i++) {
+        var palabraAleatoria = array[Math.floor(Math.random() * array.length)];
+
+        if (i === maxPalabras - 1) {
+          texto += palabraAleatoria;
+        } else {
+          texto += palabraAleatoria + ' ';
+        }
+      }
+
+      return texto;
+    }
       
     var text = generarTextoAleatorio(arrayPalabras);//"ahora que sabes escribir con los diez dedos trabajaremos en tu velocidad y luego pasaremos a otras teclas ahora que sabes escribir con los diez dedos trabajaremos en tu velocidad y luego pasaremos a otras teclas";
     var words = text.split(' ');
@@ -154,6 +160,7 @@ function generarTextoAleatorio(array) {
     var currentWordIndex = 0;
     var startTime = null;
     var endTime = null;
+    var wpmArray = [];
 
     for (var i = 0; i < words.length; i++) {
       var span = document.createElement('span');
@@ -207,8 +214,26 @@ function generarTextoAleatorio(array) {
              input.classList.remove('error', 'correct');
              textContainer.getElementsByClassName('word')[currentWordIndex].classList.add('correct');
              currentWordIndex++;
+
+            if (currentWordIndex === words.length) {
+              endTime = new Date().getTime();
+              var elapsedTime = (endTime - startTime) / 1000;
+              var wpm = Math.round(words.length / (elapsedTime / 60));
+              wpmArray.push(wpm);
+              calculateAverageWPM();
+            }
+
           }
       }
+    }
+
+
+    function calculateAverageWPM() {
+      var sum = wpmArray.reduce(function (a, b) {
+        return a + b;
+      }, 0);
+      var averageWPM = Math.round(sum / wpmArray.length);
+      wpmElement.innerHTML = averageWPM;
     }
 
     setInterval(updateTime, 1000);
@@ -220,7 +245,15 @@ function generarTextoAleatorio(array) {
         var wpm = Math.round(currentWordIndex / (elapsedTime / 60));
         wpmElement.innerHTML =  wpm;
         timeElement.innerHTML =  parseInt(60-elapsedTime.toFixed(2), 10);
-        if (parseInt(60-elapsedTime.toFixed(2), 10)==0)   startTime = null;
+        //if (parseInt(60-elapsedTime.toFixed(2), 10)==0)   startTime = null;
+
+        if (remainingTime === 0) {
+          endTime = currentTime;
+          var wpm = Math.round(currentWordIndex / (elapsedTime / 60));
+          wpmArray.push(wpm);
+          calculateAverageWPM();
+        }
+
       }
       // console.log(startTime);
 

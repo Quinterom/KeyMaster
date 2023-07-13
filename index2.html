@@ -1,146 +1,39 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <title>KeyMaster</title>
-  <meta charset="UTF-8">
-  <style>
-    /* Estilos omitidos por brevedad */
-  </style>
-</head>
-<body>
-  <header class="header">
-    <!-- Código del encabezado omitido por brevedad -->
-  </header>
-  
-  <div class="separator"></div>
-  <div class="container">
-    <span id="wpm"></span>
-    <span id="time"></span>
-    <div id="textContainer"></div>
-  </div>
-  <div class="separator"></div>
-    <div style="text-align: center;">
-        <input type="text" id="input" autofocus class="input" oninput="checkWord()" onkeydown="handleKeyDown(event)">
-    </div>
-  <script>
-    var arrayPalabras = ["parece", "uno"];
-   
-    function generarTextoAleatorio(array) {
-      var texto = '';
-      var maxPalabras = 43;
+  <head>
+    <meta charset="UTF-8">
+    <title>Llamar a función en Vercel</title>
+  </head>
+  <body>
+    <button id="btnEnviar">Enviar datos</button>
 
-      for (var i = 0; i < maxPalabras; i++) {
-        var palabraAleatoria = array[Math.floor(Math.random() * array.length)];
+    <script>
+      document.getElementById('btnEnviar').addEventListener('click', function() {
+        const data = {
+          palabrasPorMinuto: 75 // Ejemplo de dato a enviar
+        };
 
-        if (i === maxPalabras - 1) {
-          texto += palabraAleatoria;
-        } else {
-          texto += palabraAleatoria + ' ';
-        }
-      }
-
-      return texto;
-    }
-      
-    var text = generarTextoAleatorio(arrayPalabras);
-    var words = text.split(' ');
-
-    var textContainer = document.getElementById('textContainer');
-    var input = document.getElementById('input');
-    var wpmElement = document.getElementById('wpm');
-    var timeElement = document.getElementById('time');
-
-    var currentWordIndex = 0;
-    var startTime = null;
-    var endTime = null;
-    var wpmArray = [];
-
-    for (var i = 0; i < words.length; i++) {
-      var span = document.createElement('span');
-      span.innerHTML = words[i];
-      span.classList.add('word');
-      textContainer.appendChild(span);
-    }
-
-    input.focus();
-
-    function checkWord() {
-      var inputWord = input.value.trim();
-      var wordElements = textContainer.getElementsByClassName('word');
-      var currentWordElement = wordElements[currentWordIndex];
-
-      var isMatch = true;
-
-      for (var i = 0; i < inputWord.length; i++) {
-        var char = currentWordElement.textContent[i];
-        var charInput = inputWord[i];
-
-        if (charInput === undefined || char !== charInput) {
-          isMatch = false;
-          break;
-        }
-      }
-
-      if (isMatch) {
-        if (currentWordElement != null) {
-          currentWordElement.classList.remove('error');
-          currentWordElement.classList.add('selected');
-        } else {
-          startTime = null;
-        }
-      } else {
-        currentWordElement.classList.remove('selected');
-        currentWordElement.classList.add('error');
-      }
-    }
-
-    function handleKeyDown(event) {
-      if (startTime == null) {
-        startTime = new Date().getTime();
-      } else {
-        if (event.key === ' ' && input.value.trim() === words[currentWordIndex]) {
-          input.value = '';
-          input.classList.remove('error', 'correct');
-          textContainer.getElementsByClassName('word')[currentWordIndex].classList.add('correct');
-          currentWordIndex++;
-
-          if (currentWordIndex === words.length) {
-            endTime = new Date().getTime();
-            var elapsedTime = (endTime - startTime) / 1000;
-            var wpm = Math.round(words.length / (elapsedTime / 60));
-            wpmArray.push(wpm);
-            calculateAverageWPM();
-          }
-        }
-      }
-    }
-
-    function calculateAverageWPM() {
-      var sum = wpmArray.reduce(function (a, b) {
-        return a + b;
-      }, 0);
-      var averageWPM = Math.round(sum / wpmArray.length);
-      wpmElement.innerHTML = averageWPM;
-    }
-
-    setInterval(updateTime, 1000);
-
-    function updateTime() {
-      if (startTime !== null && endTime === null) {
-        var currentTime = new Date().getTime();
-        var elapsedTime = (currentTime - startTime) / 1000;
-        var remainingTime = Math.max(0, 60 - elapsedTime);
-        timeElement.innerHTML = remainingTime.toFixed(2);
-
-        if (remainingTime === 0) {
-          endTime = currentTime;
-          var wpm = Math.round(currentWordIndex / (elapsedTime / 60));
-          wpmArray.push(wpm);
-          calculateAverageWPM();
-        }
-      }
-    }
-
-  </script>
-</body>
+        fetch('/api/guardar-datos', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+          .then(response => {
+            if (response.ok) {
+              return response.json();
+            } else {
+              throw new Error('Error al guardar los datos');
+            }
+          })
+          .then(data => {
+            console.log(data.message); // Mensaje de confirmación o resultado de la función en Vercel
+          })
+          .catch(error => {
+            console.error('Error en la solicitud', error);
+          });
+      });
+    </script>
+  </body>
 </html>
