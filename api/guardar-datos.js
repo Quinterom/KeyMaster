@@ -1,5 +1,7 @@
 // index.js (en tu función en Vercel)
 
+import { MongoClient } from 'mongodb';
+
 // Definir el enrutador de middleware
 const router = async (req, res) => {
   if (req.method === 'POST' && req.url === '/api/guardar-datos') {
