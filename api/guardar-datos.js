@@ -5,7 +5,7 @@ import { MongoClient } from 'mongodb';
 // Configura la cadena de conexión a tu base de datos en MongoDB Atlas
 //const uri = 'mongodb+srv://<jlqm>:<Mazinger3>@<ClusterKeyM>.mongodb.net/<basededatos>?retryWrites=true&w=majority';
 
-const uri = 'mongodb+srv://jlqm:Mazinger3@clusterkeym.etc90r2.mongodb.net/?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://jlqm:Mazinger3@clusterkeym.etc90r2.mongodb.net/?retryWrites=true&w=majority'; 
 
 // Función para guardar los datos en la base de datos
 const guardarDatos = async (data) => {
