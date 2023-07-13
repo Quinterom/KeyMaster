@@ -4,10 +4,9 @@
     "description": "Mi proyecto con KeyMaster",
     "main": "index.js",
     "scripts": {
-      "start": "node index.js"
+        "start": "node index.js"
     },
     "dependencies": {
-      "mongodb": "^4.4.5"
+        "mongodb": "^4.16.0"
     }
-  }
-  
+}
