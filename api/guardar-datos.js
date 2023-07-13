@@ -5,7 +5,7 @@ import { MongoClient } from 'mongodb';
 // Configura la cadena de conexión a tu base de datos en MongoDB Atlas
 //const uri = 'mongodb+srv://<jlqm>:<Mazinger3>@<ClusterKeyM>.mongodb.net/<basededatos>?retryWrites=true&w=majority';
 
-const uri = 'mongodb+srv://jlqm:<password>@clusterkeym.etc90r2.mongodb.net/?retryWrites=true&w=majority';
+const uri = 'mongodb+srv://jlqm:Mazinger3@clusterkeym.etc90r2.mongodb.net/?retryWrites=true&w=majority';
 
 // Función para guardar los datos en la base de datos
 const guardarDatos = async (data) => {
@@ -15,15 +15,15 @@ const guardarDatos = async (data) => {
     await client.connect();
 
     // Conectarse a la base de datos y obtener una referencia a la colección
-    const db = client.db('<nombre-coleccion>');
-    const collection = db.collection('<nombre-coleccion>');
+    const db = client.db('<KeyMastercoleccion>');
+    const collection = db.collection('<KeyMastercoleccion>');
 
     // Insertar los datos en la colección
     await collection.insertOne(data);
 
     console.log('Datos guardados exitosamente');
   } catch (error) {
-    console.error('Error al guardar los datos', error);
+    console.error('Error al guardar los datos...', error);
   } finally {
     // Cerrar la conexión con la base de datos
     await client.close();
