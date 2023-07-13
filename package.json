@@ -1,0 +1,13 @@
+{
+    "name": "KeyMaster",
+    "version": "1.0.0",
+    "description": "Mi proyecto con KeyMaster",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "dependencies": {
+      "mongodb": "^4.4.5"
+    }
+  }
+  
