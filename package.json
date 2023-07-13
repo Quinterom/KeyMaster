@@ -1,12 +1,16 @@
 {
-    "name": "KeyMaster",
+    "name": "keymaster",
     "version": "1.0.0",
-    "description": "Mi proyecto con KeyMaster",
-    "main": "index.js",
-    "scripts": {
-        "start": "node index.js"
-    },
-    "dependencies": {
-        "mongodb": "^4.16.0"
+    "lockfileVersion": 2,
+    "requires": true,
+    "packages": {
+        "": {
+            "name": "KeyMaster",
+            "version": "1.0.0",
+            "dependencies": {
+                "mongodb": "^4.16.0"
+            }
+        }
+     
     }
 }
